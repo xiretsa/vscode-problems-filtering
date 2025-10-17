@@ -1,0 +1,13 @@
+[package]
+name = "vscode-problems-filtering"
+version = "0.1.0"
+edition = "2024"
+authors = ["Pierre Faucquenoy"]
+description = "Permit to filter vscode's problems view export in json"
+readme = "README.md"
+license = "MIT"
+license-file = "LICENSE.txt"
+keywords = ["vscode", "problems"]
+categories = ["command-line-utilities"]
+
+[dependencies]

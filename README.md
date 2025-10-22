@@ -63,6 +63,40 @@ Le fichier JSON doit contenir un tableau d'objets représentant les problèmes V
 cargo test
 ```
 
+## Code Coverage
+
+Ce projet est configuré avec `cargo-llvm-cov` pour le code coverage et l'extension VS Code Coverage Gutters pour l'affichage ligne par ligne.
+
+### Génération des rapports
+
+```bash
+# Script convenience (recommandé)
+./coverage.sh all          # Génère tous les rapports
+./coverage.sh summary       # Affiche un résumé
+./coverage.sh html          # Rapport HTML seulement
+./coverage.sh lcov          # Fichier LCOV pour VS Code
+
+# Commandes cargo directes
+cargo llvm-cov --html --output-dir target/coverage
+cargo llvm-cov --lcov --output-path target/coverage/lcov.info
+cargo llvm-cov --summary-only
+```
+
+### Affichage dans VS Code
+
+1. Générez le fichier LCOV : `./coverage.sh lcov`
+2. Ouvrez un fichier Rust dans VS Code
+3. Utilisez la commande "Coverage Gutters: Display Coverage" (Ctrl+Shift+P)
+4. Les lignes couvertes/non-couvertes apparaîtront avec des couleurs dans l'éditeur
+
+### Tâches VS Code
+
+Utilisez `Ctrl+Shift+P` > "Tasks: Run Task" et sélectionnez :
+- **Coverage: Complete Report (HTML + LCOV)** - Génère tous les rapports (par défaut)
+- **Coverage: Generate HTML Report** - Rapport HTML
+- **Coverage: Generate LCOV Report** - Fichier LCOV pour l'extension
+- **Coverage: Show Summary** - Résumé dans le terminal
+
 ## Bibliothèques utilisées
 
 - `clap` - Parsing des arguments CLI avec derive macros

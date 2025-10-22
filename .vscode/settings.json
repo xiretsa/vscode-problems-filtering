@@ -1,0 +1,31 @@
+{
+    // Configuration pour Coverage Gutters
+    "coverage-gutters.coverageFileNames": [
+        "lcov.info",
+        "coverage.json",
+        "cov.xml",
+        "coverage.xml"
+    ],
+    "coverage-gutters.coverageReportFileName": "index.html",
+    "coverage-gutters.coverageBaseDir": "target/coverage",
+    "coverage-gutters.showLineCoverage": true,
+    "coverage-gutters.showGutterCoverage": true,
+    "coverage-gutters.showRulerCoverage": true,
+    // "coverage-gutters.highlightdark": "rgba(128, 128, 128, 0.2)",
+    // "coverage-gutters.highlightlight": "rgba(128, 128, 128, 0.2)",
+    // "coverage-gutters.noHighlightDark": "rgba(255, 0, 0, 0.2)",
+    // "coverage-gutters.noHighlightLight": "rgba(255, 0, 0, 0.2)",
+    // "coverage-gutters.partialHighlightDark": "rgba(255, 255, 0, 0.2)",
+    // "coverage-gutters.partialHighlightLight": "rgba(255, 255, 0, 0.2)",
+
+    // Configuration Rust spécifique
+    "rust-analyzer.cargo.buildScripts.enable": true,
+
+    // Configuration des tests
+    // "rust-analyzer.cargo.buildScripts.overrideCommand": [
+    //     "cargo",
+    //     "llvm-cov",
+    //     "--all-features",
+    //     "--workspace"
+    // ]
+}

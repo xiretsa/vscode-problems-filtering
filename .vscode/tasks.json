@@ -1,0 +1,105 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Coverage: Generate HTML Report",
+            "type": "shell",
+            "command": "./coverage.sh",
+            "args": [
+                "html"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Coverage: Generate LCOV Report",
+            "type": "shell",
+            "command": "./coverage.sh",
+            "args": [
+                "lcov"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Coverage: Generate JSON Report",
+            "type": "shell",
+            "command": "./coverage.sh",
+            "args": [
+                "json"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Coverage: Show Summary",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "llvm-cov",
+                "--summary-only"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": "$rustc"
+        },
+        {
+            "label": "Coverage: Complete Report (HTML + LCOV)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Coverage: Generate HTML Report",
+                "Coverage: Generate LCOV Report"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Coverage: Open HTML Report",
+            "type": "shell",
+            "command": "code",
+            "args": [
+                "target/coverage/html/index.html"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}

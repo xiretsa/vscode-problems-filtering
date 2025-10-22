@@ -1,63 +1,11 @@
+mod problem;
+
 use anyhow::{Context, Result};
 use clap::Parser;
-use serde::{Deserialize, Serialize};
+use problem::{Problem, ProblemOutput};
 use std::fs;
 use std::path::PathBuf;
-use tabled::{Table, Tabled};
-
-/// Structure représentant un problème VS Code
-#[derive(Debug, Deserialize)]
-struct Problem {
-    resource: String,
-    #[serde(rename = "startLineNumber")]
-    start_line_number: u32,
-    message: String,
-    // Autres champs optionnels que nous ignorons pour le filtrage
-    #[serde(flatten)]
-    _other: serde_json::Value,
-}
-
-/// Structure pour l'affichage en tableau
-#[derive(Tabled, Serialize)]
-struct ProblemOutput {
-    #[tabled(rename = "Resource")]
-    resource: String,
-    #[tabled(rename = "Message")]
-    message: String,
-    #[tabled(rename = "Line")]
-    line: u32,
-}
-
-impl ProblemOutput {
-    fn new(problem: &Problem) -> Self {
-        // Tronquer le chemin pour l'affichage (garder seulement le nom du fichier et le dossier parent)
-        let resource = if let Some(pos) = problem.resource.rfind('/') {
-            let filename = &problem.resource[pos + 1..];
-            // Essayer de garder aussi le dossier parent
-            if let Some(parent_pos) = problem.resource[..pos].rfind('/') {
-                let parent = &problem.resource[parent_pos + 1..pos];
-                format!("{parent}/{filename}")
-            } else {
-                filename.to_string()
-            }
-        } else {
-            problem.resource.clone()
-        };
-
-        // Tronquer le message s'il est trop long
-        let message = if problem.message.len() > 150 {
-            format!("{}...", &problem.message[..147])
-        } else {
-            problem.message.clone()
-        };
-
-        Self {
-            resource,
-            message,
-            line: problem.start_line_number,
-        }
-    }
-}
+use tabled::{Table};
 
 /// Application CLI pour filtrer les problèmes VS Code
 #[derive(Parser)]
@@ -66,7 +14,7 @@ impl ProblemOutput {
     about = "Filtre les problèmes VS Code selon des critères d'inclusion et d'exclusion",
     version = "0.1.0"
 )]
-struct Cli {
+struct CliProblemApp {
     /// Fichier JSON contenant les problèmes VS Code
     #[arg(short = 'f', long, value_name = "FILE")]
     input: PathBuf,
@@ -92,7 +40,7 @@ struct Cli {
     json: bool,
 }
 
-impl Cli {
+impl CliProblemApp {
     /// Filtre un problème selon les critères d'inclusion et d'exclusion
     fn filter_problem(&self, problem: &Problem) -> bool {
         let message = if self.ignore_case {
@@ -126,7 +74,7 @@ impl Cli {
 }
 
 fn main() -> Result<()> {
-    let cli = Cli::parse();
+    let cli = CliProblemApp::parse();
 
     // Validation des arguments
     if cli.include_terms.is_empty() && cli.exclude_terms.is_empty() {
@@ -195,7 +143,7 @@ mod tests {
 
     #[test]
     fn test_filter_problem_include() {
-        let cli = Cli {
+        let cli = CliProblemApp {
             input: PathBuf::new(),
             include_terms: vec!["deprecated".to_string()],
             exclude_terms: vec![],
@@ -216,7 +164,7 @@ mod tests {
 
     #[test]
     fn test_filter_problem_exclude() {
-        let cli = Cli {
+        let cli = CliProblemApp {
             input: PathBuf::new(),
             include_terms: vec![],
             exclude_terms: vec!["warning".to_string()],
@@ -237,7 +185,7 @@ mod tests {
 
     #[test]
     fn test_filter_problem_case_insensitive() {
-        let cli = Cli {
+        let cli = CliProblemApp {
             input: PathBuf::new(),
             include_terms: vec!["DEPRECATED".to_string()],
             exclude_terms: vec![],

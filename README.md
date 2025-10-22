@@ -1,14 +1,14 @@
 # VS Code Problems Filtering
 
-Une application CLI Rust pour filtrer les problèmes exportés depuis la vue Problèmes de VS Code.
+A Rust CLI application to filter problems exported from VS Code's Problems view.
 
-## Fonctionnalités
+## Features
 
-- Filtrage par termes d'inclusion (tous doivent être présents)
-- Filtrage par termes d'exclusion (aucun ne doit être présent)
-- Support des comparaisons insensibles à la casse
-- Affichage en tableau formaté
-- Gestion d'erreurs robuste
+- Filter by inclusion terms (all must be present)
+- Filter by exclusion terms (none must be present)
+- Case-insensitive comparison support
+- Formatted table display
+- Robust error handling
 
 ## Installation
 
@@ -16,46 +16,46 @@ Une application CLI Rust pour filtrer les problèmes exportés depuis la vue Pro
 cargo build --release
 ```
 
-## Utilisation
+## Usage
 
 ```bash
-# Afficher l'aide
+# Display help
 cargo run -- --help
 
-# Filtrer les problèmes contenant "deprecated"
+# Filter problems containing "deprecated"
 cargo run -- -f deprecated.json -i "deprecated"
 
-# Filtrer les problèmes contenant "deprecated" mais excluant "ActionError"
+# Filter problems containing "deprecated" but excluding "ActionError"
 cargo run -- -f deprecated.json -i "deprecated" -e "ActionError"
 
-# Filtrage insensible à la casse
+# Case-insensitive filtering
 cargo run -- -f deprecated.json -i "DEPRECATED" --ignore-case
 
-# Plusieurs termes d'inclusion et d'exclusion
+# Multiple inclusion and exclusion terms
 cargo run -- -f deprecated.json -i "deprecated" -i "warning" -e "test" -e "mock"
 
-# Compter seulement les résultats (sans afficher le tableau)
+# Count results only (without displaying table)
 cargo run -- -f deprecated.json -i "deprecated" --count-only
 
-# Sortie au format JSON
+# JSON output
 cargo run -- -f deprecated.json -i "constructor" -e "sonarqube" --json
 ```
 
 ## Options
 
-- `-f, --input <FILE>`: Fichier JSON d'entrée (requis)
-- `-i, --include <TERM>`: Terme à inclure (répétable)
-- `-e, --exclude <TERM>`: Terme à exclure (répétable)
-- `--ignore-case`: Ignorer la casse lors des comparaisons
-- `-c, --count-only`: Afficher seulement le nombre de résultats
-- `--json`: Sortie au format JSON
+- `-f, --input <FILE>`: Input JSON file (required)
+- `-i, --include <TERM>`: Term to include (repeatable)
+- `-e, --exclude <TERM>`: Term to exclude (repeatable)
+- `--ignore-case`: Ignore case in comparisons
+- `-c, --count-only`: Display only the number of results
+- `--json`: Output in JSON format
 
-## Format du fichier d'entrée
+## Input File Format
 
-Le fichier JSON doit contenir un tableau d'objets représentant les problèmes VS Code, avec au minimum les champs :
-- `resource`: le chemin du fichier
-- `message`: le message du problème
-- `startLineNumber`: le numéro de ligne
+The JSON file must contain an array of objects representing VS Code problems, with at least these fields:
+- `resource`: file path
+- `message`: problem message
+- `startLineNumber`: line number
 
 ## Tests
 
@@ -65,45 +65,45 @@ cargo test
 
 ## Code Coverage
 
-Ce projet est configuré avec `cargo-llvm-cov` pour le code coverage et l'extension VS Code Coverage Gutters pour l'affichage ligne par ligne.
+This project is configured with `cargo-llvm-cov` for code coverage and VS Code Coverage Gutters extension for line-by-line display.
 
-### Génération des rapports
+### Generating Reports
 
 ```bash
-# Script convenience (recommandé)
-./coverage.sh all          # Génère tous les rapports
-./coverage.sh summary       # Affiche un résumé
-./coverage.sh html          # Rapport HTML seulement
-./coverage.sh lcov          # Fichier LCOV pour VS Code
+# Convenience script (recommended)
+./coverage.sh all          # Generate all reports
+./coverage.sh summary      # Display summary
+./coverage.sh html        # HTML report only
+./coverage.sh lcov        # LCOV file for VS Code
 
-# Commandes cargo directes
+# Direct cargo commands
 cargo llvm-cov --html --output-dir target/coverage
 cargo llvm-cov --lcov --output-path target/coverage/lcov.info
 cargo llvm-cov --summary-only
 ```
 
-### Affichage dans VS Code
+### Display in VS Code
 
-1. Générez le fichier LCOV : `./coverage.sh lcov`
-2. Ouvrez un fichier Rust dans VS Code
-3. Utilisez la commande "Coverage Gutters: Display Coverage" (Ctrl+Shift+P)
-4. Les lignes couvertes/non-couvertes apparaîtront avec des couleurs dans l'éditeur
+1. Generate the LCOV file: `./coverage.sh lcov`
+2. Open a Rust file in VS Code
+3. Use the "Coverage Gutters: Display Coverage" command (Ctrl+Shift+P)
+4. Covered/uncovered lines will appear with colors in the editor
 
-### Tâches VS Code
+### VS Code Tasks
 
-Utilisez `Ctrl+Shift+P` > "Tasks: Run Task" et sélectionnez :
-- **Coverage: Complete Report (HTML + LCOV)** - Génère tous les rapports (par défaut)
-- **Coverage: Generate HTML Report** - Rapport HTML
-- **Coverage: Generate LCOV Report** - Fichier LCOV pour l'extension
-- **Coverage: Show Summary** - Résumé dans le terminal
+Use `Ctrl+Shift+P` > "Tasks: Run Task" and select:
+- **Coverage: Complete Report (HTML + LCOV)** - Generate all reports (default)
+- **Coverage: Generate HTML Report** - HTML report
+- **Coverage: Generate LCOV Report** - LCOV file for the extension
+- **Coverage: Show Summary** - Summary in terminal
 
-## Bibliothèques utilisées
+## Libraries Used
 
-- `clap` - Parsing des arguments CLI avec derive macros
-- `serde` & `serde_json` - Sérialisation/désérialisation JSON
-- `anyhow` - Gestion d'erreurs ergonomique
-- `tabled` - Affichage en tableau formaté
+- `clap` - CLI argument parsing with derive macros
+- `serde` & `serde_json` - JSON serialization/deserialization
+- `anyhow` - Ergonomic error handling
+- `tabled` - Formatted table display
 
-## Licence
+## License
 
 MIT

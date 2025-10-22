@@ -61,3 +61,92 @@ impl ProblemOutput {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_problem_output_short_path() {
+        let problem = Problem {
+            resource: "file.txt".to_string(),
+            start_line_number: 1,
+            message: "test message".to_string(),
+            _other: serde_json::Value::Null,
+        };
+
+        let output = ProblemOutput::new(&problem);
+        assert_eq!(output.resource, "file.txt");
+        assert_eq!(output.message, "test message");
+        assert_eq!(output.line, 1);
+    }
+
+    #[test]
+    fn test_problem_output_with_parent() {
+        let problem = Problem {
+            resource: "src/nested/file.txt".to_string(),
+            start_line_number: 1,
+            message: "test message".to_string(),
+            _other: serde_json::Value::Null,
+        };
+
+        let output = ProblemOutput::new(&problem);
+        assert_eq!(output.resource, "nested/file.txt");
+    }
+
+    #[test]
+    fn test_problem_output_long_path() {
+        let problem = Problem {
+            resource: "/very/long/path/with/many/segments/file.txt".to_string(),
+            start_line_number: 1,
+            message: "test message".to_string(),
+            _other: serde_json::Value::Null,
+        };
+
+        let output = ProblemOutput::new(&problem);
+        assert_eq!(output.resource, "segments/file.txt");
+    }
+
+    #[test]
+    fn test_problem_output_short_message() {
+        let problem = Problem {
+            resource: "file.txt".to_string(),
+            start_line_number: 1,
+            message: "short message".to_string(),
+            _other: serde_json::Value::Null,
+        };
+
+        let output = ProblemOutput::new(&problem);
+        assert_eq!(output.message, "short message");
+    }
+
+    #[test]
+    fn test_problem_output_long_message() {
+        let message = "a".repeat(200); // Message plus long que 150 caractères
+        let problem = Problem {
+            resource: "file.txt".to_string(),
+            start_line_number: 1,
+            message,
+            _other: serde_json::Value::Null,
+        };
+
+        let output = ProblemOutput::new(&problem);
+        assert_eq!(output.message.len(), 150);
+        assert!(output.message.ends_with("..."));
+    }
+
+    #[test]
+    fn test_problem_output_exact_length_message() {
+        let message = "a".repeat(150); // Message exactement 150 caractères
+        let problem = Problem {
+            resource: "file.txt".to_string(),
+            start_line_number: 1,
+            message: message.clone(),
+            _other: serde_json::Value::Null,
+        };
+
+        let output = ProblemOutput::new(&problem);
+        assert_eq!(output.message, message);
+        assert!(!output.message.ends_with("..."));
+    }
+}
